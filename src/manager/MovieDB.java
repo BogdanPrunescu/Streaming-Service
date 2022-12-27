@@ -30,7 +30,7 @@ public final class MovieDB {
     public ArrayList<Movie> getMoviesbyFilters(final Filters filter) {
 
         ArrayList<Movie> filteredMovies = new ArrayList<>();
-        for (Movie movie : AppManager.getMovieDB().getMoviesOfUser(AppManager.getCurrentUser())) {
+        for (Movie movie : AppManager.getInstance().getMovieDB().getMoviesOfUser(AppManager.getInstance().getCurrentUser())) {
             filteredMovies.add(movie);
         }
         if (filter.getSort() != null) {
@@ -168,7 +168,7 @@ public final class MovieDB {
      */
     public ArrayList<Movie> getMoviesbyStart(final String search) {
         ArrayList<Movie> filteredMovies = new ArrayList<>();
-        for (Movie movie : AppManager.getCurrentMoviesList()) {
+        for (Movie movie : AppManager.getInstance().getCurrentMoviesList()) {
             if (movie.getName().startsWith(search)) {
                 filteredMovies.add(movie);
             }

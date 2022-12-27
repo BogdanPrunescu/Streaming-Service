@@ -19,14 +19,14 @@ public final class Main {
     public static void main(final String[] args) throws IOException {
         File inputFile = new File(args[0]);
 
-        File outputFile = new File(args[1]);
+        File outputFile = new File("my_output/" + args[1]);
         outputFile.createNewFile();
 
         ObjectMapper objectMapper = new ObjectMapper();
         Input input = objectMapper.readValue(inputFile, Input.class);
         ArrayNode output = objectMapper.createArrayNode();
 
-        AppManager.initiateApp(input, output);
+        AppManager.getInstance().initiateApp(input, output);
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(outputFile, output);

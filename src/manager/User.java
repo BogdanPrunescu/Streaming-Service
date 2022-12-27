@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public final class User {
-
     private static final int PREMIUM_FREE_MOVIES = 15;
 
     private Credentials credentials;
@@ -20,6 +19,28 @@ public final class User {
     private ArrayList<Movie> watchedMovies = new ArrayList<>();
     private ArrayList<Movie> likedMovies = new ArrayList<>();
     private ArrayList<Movie> ratedMovies = new ArrayList<>();
+    private ArrayList<Notification> notifications = new ArrayList<>();
+
+    private static final class Notification {
+        private String movieName;
+        private String message;
+
+        public String getMovieName() {
+            return movieName;
+        }
+
+        public void setMovieName(String movieName) {
+            this.movieName = movieName;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
 
     @Override
     public boolean equals(final Object o) {
@@ -116,5 +137,13 @@ public final class User {
 
     public void setRatedMovies(final ArrayList<Movie> ratedMovies) {
         this.ratedMovies = ratedMovies;
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = notifications;
     }
 }

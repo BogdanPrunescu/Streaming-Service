@@ -57,8 +57,8 @@ public final class Output {
                     new ArrayList<>(), null);
         } else {
             output = new Output(null,
-                    AppManager.getCurrentMoviesList(), AppManager.getCurrentUser());
+                    AppManager.getInstance().getCurrentMoviesList(), AppManager.getInstance().getCurrentUser());
         }
-        AppManager.getOutput().addPOJO(output);
+        AppManager.getInstance().getOutput().addPOJO(output);
     }
 }

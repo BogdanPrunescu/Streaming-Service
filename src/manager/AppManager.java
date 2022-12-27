@@ -17,21 +17,29 @@ public final class AppManager {
 
     private AppManager() { }
 
-    private static UserDB userDB;
-    private static MovieDB movieDB;
-    private static NavigationGraph navigationGraph;
-    private static User currentUser = null;
-    private static ArrayList<Movie> currentMoviesList;
-    private static ArrayNode output;
-    private static Page currentPage;
-    private static String selectedMovie = null;
+    private static AppManager instance = null;
+
+    public static AppManager getInstance() {
+        if (instance == null) {
+            instance = new AppManager();
+        }
+        return instance;
+    }
+    private UserDB userDB;
+    private MovieDB movieDB;
+    private NavigationGraph navigationGraph;
+    private User currentUser = null;
+    private ArrayList<Movie> currentMoviesList;
+    private ArrayNode output;
+    private Page currentPage;
+    private String selectedMovie = null;
 
     /**
      * Initialize the platform
      * @param input
      * @param myOutput
      */
-    public static void initiateApp(final Input input, final ArrayNode myOutput) {
+    public void initiateApp(final Input input, final ArrayNode myOutput) {
 
        setNavigationGraph(NavigationGraph.initiateNavigationSystem());
 
@@ -45,21 +53,21 @@ public final class AppManager {
            getMovieDB().addElement(movie);
        }
 
-       AppManager.setOutput(myOutput);
+       setOutput(myOutput);
        setCurrentPage(new Authpage());
        setCurrentMoviesList(new ArrayList<>());
 
         startApp(input);
     }
 
-    private static void startApp(final Input input) {
+    private void startApp(final Input input) {
 
         for (ActionInput action : input.getActions()) {
 
             if (action.getType().equals("change page")) {
 
                 ChangePageVisitor visitor = new ChangePageVisitor();
-                if (getNavigationGraph().isPageAvailable(action.getPage())) {
+                if (navigationGraph.isPageAvailable(action.getPage())) {
                     changePage(action.getPage());
                     if (action.getMovie() != null) {
                         setSelectedMovie(action.getMovie());
@@ -79,8 +87,11 @@ public final class AppManager {
                     newEvent.accept(visitor, action);
                     continue;
                 }
-
                 Output.printOutput("Error");
+            } else if (action.getType().equals("database")) {
+
+            } else if (action.getType().equals("subscribe")) {
+
             }
         }
     }
@@ -90,72 +101,72 @@ public final class AppManager {
      * Must verify first is the mutation is possible
      * @param dest destination page
      */
-    public static void changePage(final String dest) {
+    public void changePage(final String dest) {
         getNavigationGraph().setCurrentPage(dest);
         setCurrentPage(PageFactory.getPageByName(dest));
     }
 
-    public static UserDB getUserDB() {
+    public UserDB getUserDB() {
         return userDB;
     }
 
-    public static void setUserDB(final UserDB userDB) {
-        AppManager.userDB = userDB;
+    public void setUserDB(final UserDB userDB) {
+        this.userDB = userDB;
     }
 
-    public static MovieDB getMovieDB() {
+    public MovieDB getMovieDB() {
         return movieDB;
     }
 
-    public static void setMovieDB(final MovieDB movieDB) {
-        AppManager.movieDB = movieDB;
+    public void setMovieDB(final MovieDB movieDB) {
+        this.movieDB = movieDB;
     }
 
-    public static NavigationGraph getNavigationGraph() {
+    public NavigationGraph getNavigationGraph() {
         return navigationGraph;
     }
 
-    public static void setNavigationGraph(final NavigationGraph navigationGraph) {
-        AppManager.navigationGraph = navigationGraph;
+    public void setNavigationGraph(final NavigationGraph navigationGraph) {
+        this.navigationGraph = navigationGraph;
     }
 
-    public static User getCurrentUser() {
+    public User getCurrentUser() {
         return currentUser;
     }
 
-    public static void setCurrentUser(final User currentUser) {
-        AppManager.currentUser = currentUser;
+    public void setCurrentUser(final User currentUser) {
+        this.currentUser = currentUser;
     }
 
-    public static ArrayList<Movie> getCurrentMoviesList() {
+    public ArrayList<Movie> getCurrentMoviesList() {
         return currentMoviesList;
     }
 
-    public static void setCurrentMoviesList(final ArrayList<Movie> currentMoviesList) {
-        AppManager.currentMoviesList = currentMoviesList;
+    public void setCurrentMoviesList(final ArrayList<Movie> currentMoviesList) {
+        this.currentMoviesList = currentMoviesList;
     }
 
-    public static ArrayNode getOutput() {
+    public ArrayNode getOutput() {
         return output;
     }
 
-    public static void setOutput(final ArrayNode output) {
-        AppManager.output = output;
+    public void setOutput(final ArrayNode output) {
+        this.output = output;
     }
 
-    public static Page getCurrentPage() {
+    public Page getCurrentPage() {
         return currentPage;
     }
 
-    public static void setCurrentPage(final Page currentPage) {
-        AppManager.currentPage = currentPage;
+    public void setCurrentPage(final Page currentPage) {
+        this.currentPage = currentPage;
     }
 
-    public static String getSelectedMovie() {
+    public String getSelectedMovie() {
         return selectedMovie;
     }
 
-    public static void setSelectedMovie(final String selectedMovie) {
-        AppManager.selectedMovie = selectedMovie;
+    public void setSelectedMovie(final String selectedMovie) {
+        this.selectedMovie = selectedMovie;
     }
 }

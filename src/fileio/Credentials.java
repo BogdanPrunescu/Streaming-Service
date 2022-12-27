@@ -31,6 +31,13 @@ public final class Credentials {
     public String balanceToString() {
         return balance.toString();
     }
+    @JsonProperty("balance")
+    public void setBalance(final int balance) {
+        this.balance = balance;
+    }
+    public Integer getBalance() {
+        return balance;
+    }
 
     public String getName() {
         return name;
@@ -62,14 +69,5 @@ public final class Credentials {
 
     public void setCountry(final String country) {
         this.country = country;
-    }
-
-    public Integer getBalance() {
-        return balance;
-    }
-
-    @JsonProperty("balance")
-    public void setBalance(final int balance) {
-        this.balance = balance;
     }
 }

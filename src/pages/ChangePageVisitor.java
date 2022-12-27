@@ -46,8 +46,8 @@ public final class ChangePageVisitor {
      * @param visitor
      */
     public void visit(final Movies visitor) {
-        AppManager.setCurrentMoviesList(AppManager.getMovieDB().
-                getMoviesOfUser(AppManager.getCurrentUser()));
+        AppManager.getInstance().setCurrentMoviesList(AppManager.getInstance().getMovieDB().
+                getMoviesOfUser(AppManager.getInstance().getCurrentUser()));
         Output.printOutput(null);
     }
 
@@ -64,9 +64,9 @@ public final class ChangePageVisitor {
      * @param visitor
      */
     public void visit(final Logout visitor) {
-        AppManager.setCurrentMoviesList(new ArrayList<>());
-        AppManager.setCurrentUser(null);
-        AppManager.changePage("authpage");
+        AppManager.getInstance().setCurrentMoviesList(new ArrayList<>());
+        AppManager.getInstance().setCurrentUser(null);
+        AppManager.getInstance().changePage("authpage");
     }
     /**
      * SeeDetails visitor show details about selected movie
@@ -74,17 +74,17 @@ public final class ChangePageVisitor {
      */
     public void visit(final SeeDetails visitor) {
         Movie selectedMovie = null;
-        for (Movie movie : AppManager.getCurrentMoviesList()) {
+        for (Movie movie : AppManager.getInstance().getCurrentMoviesList()) {
 
-            if (movie.getName().equals(AppManager.getSelectedMovie())) {
+            if (movie.getName().equals(AppManager.getInstance().getSelectedMovie())) {
                 selectedMovie = movie;
             }
         }
         if (selectedMovie == null) {
-            AppManager.changePage("movies");
+            AppManager.getInstance().changePage("movies");
             Output.printOutput("Error");
         } else {
-            AppManager.setCurrentMoviesList(new ArrayList<>(Arrays.asList(selectedMovie)));
+            AppManager.getInstance().setCurrentMoviesList(new ArrayList<>(Arrays.asList(selectedMovie)));
             Output.printOutput(null);
         }
     }

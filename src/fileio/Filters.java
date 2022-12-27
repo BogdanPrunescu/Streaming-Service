@@ -6,14 +6,6 @@ public final class Filters {
 
     private Sort sort;
 
-    public Sort getSort() {
-        return sort;
-    }
-
-    public void setSort(final Sort sort) {
-        this.sort = sort;
-    }
-
     public static final class Sort {
         private String rating;
         private String duration;
@@ -37,14 +29,6 @@ public final class Filters {
 
     private Contains contains;
 
-    public Contains getContains() {
-        return contains;
-    }
-
-    public void setContains(final Contains contains) {
-        this.contains = contains;
-    }
-
     public static final class Contains {
         private ArrayList<String> actors;
 
@@ -65,5 +49,21 @@ public final class Filters {
         public void setActors(final ArrayList<String> actors) {
             this.actors = actors;
         }
+    }
+
+    public Sort getSort() {
+        return sort;
+    }
+
+    public void setSort(final Sort sort) {
+        this.sort = sort;
+    }
+
+    public Contains getContains() {
+        return contains;
+    }
+
+    public void setContains(final Contains contains) {
+        this.contains = contains;
     }
 }
