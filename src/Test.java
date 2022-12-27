@@ -165,6 +165,7 @@ public final class Test {
             printMessage(testFileName, "Timeout");
             return;
         } catch (Exception e) {
+            e.printStackTrace(); // !!!!!!!!!!
             printMessage(testFileName, "Program ended with exception: " + e.getMessage());
             return;
         } finally {

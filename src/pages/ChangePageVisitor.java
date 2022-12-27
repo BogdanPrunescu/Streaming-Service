@@ -1,11 +1,10 @@
 package pages;
 
-import manager.AppManager;
-import manager.Movie;
-import manager.Output;
+import manager.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public final class ChangePageVisitor {
 
@@ -38,6 +37,7 @@ public final class ChangePageVisitor {
      * @param visitor
      */
     public void visit(final Homepage visitor) {
+        NavigationGraph.getInstance().historyInit();
         return;
     }
 
@@ -66,7 +66,12 @@ public final class ChangePageVisitor {
     public void visit(final Logout visitor) {
         AppManager.getInstance().setCurrentMoviesList(new ArrayList<>());
         AppManager.getInstance().setCurrentUser(null);
-        AppManager.getInstance().changePage("authpage");
+
+        Page newPage = PageFactory.getPageByName("authpage");
+        ChangePageCommand command = new ChangePageCommand(
+                NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+        NavigationGraph.getInstance().changePage(command);
+        NavigationGraph.getInstance().deleteHistory();
     }
     /**
      * SeeDetails visitor show details about selected movie
@@ -81,7 +86,10 @@ public final class ChangePageVisitor {
             }
         }
         if (selectedMovie == null) {
-            AppManager.getInstance().changePage("movies");
+            Page newPage = PageFactory.getPageByName("movies");
+            ChangePageCommand command = new ChangePageCommand(
+                    NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+            NavigationGraph.getInstance().changePage(command);
             Output.printOutput("Error");
         } else {
             AppManager.getInstance().setCurrentMoviesList(new ArrayList<>(Arrays.asList(selectedMovie)));

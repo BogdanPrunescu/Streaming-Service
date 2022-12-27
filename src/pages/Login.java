@@ -6,6 +6,7 @@ import java.util.Arrays;
 public final class Login extends Page {
 
     {
+        super.pageName = "login";
         this.setEvents(new ArrayList<>(Arrays.asList("login")));
     }
     @Override

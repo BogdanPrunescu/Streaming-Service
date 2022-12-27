@@ -27,7 +27,6 @@ public final class AppManager {
     }
     private UserDB userDB;
     private MovieDB movieDB;
-    private NavigationGraph navigationGraph;
     private User currentUser = null;
     private ArrayList<Movie> currentMoviesList;
     private ArrayNode output;
@@ -41,7 +40,7 @@ public final class AppManager {
      */
     public void initiateApp(final Input input, final ArrayNode myOutput) {
 
-       setNavigationGraph(NavigationGraph.initiateNavigationSystem());
+       NavigationGraph.getInstance().initiateNavigationSystem();
 
        setUserDB(new UserDB());
        for (UserInput user : input.getUsers()) {
@@ -54,7 +53,6 @@ public final class AppManager {
        }
 
        setOutput(myOutput);
-       setCurrentPage(new Authpage());
        setCurrentMoviesList(new ArrayList<>());
 
         startApp(input);
@@ -67,19 +65,24 @@ public final class AppManager {
             if (action.getType().equals("change page")) {
 
                 ChangePageVisitor visitor = new ChangePageVisitor();
-                if (navigationGraph.isPageAvailable(action.getPage())) {
-                    changePage(action.getPage());
+                if (NavigationGraph.getInstance().isPageAvailable(action.getPage())) {
+
+                    Page newPage = PageFactory.getPageByName(action.getPage());
+                    ChangePageCommand command = new ChangePageCommand(
+                            NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+                    NavigationGraph.getInstance().changePage(command);
+
                     if (action.getMovie() != null) {
                         setSelectedMovie(action.getMovie());
                     }
-                    getCurrentPage().accept(visitor);
+                    NavigationGraph.getInstance().getCurrentPage().accept(visitor);
                     setSelectedMovie(null);
                 } else {
                     Output.printOutput("Error");
                 }
             } else if (action.getType().equals("on page")) {
-                if (!getCurrentPage().getEvents().isEmpty()
-                        && getCurrentPage().getEvents().contains(action.getFeature())) {
+                if (!NavigationGraph.getInstance().getCurrentPage().getEvents().isEmpty()
+                        && NavigationGraph.getInstance().getCurrentPage().getEvents().contains(action.getFeature())) {
 
                     Event newEvent = PageFactory.getEventByName(action.getFeature());
 
@@ -92,19 +95,18 @@ public final class AppManager {
 
             } else if (action.getType().equals("subscribe")) {
 
+            } else if (action.getType().equals("back")) {
+                if (currentUser != null) {
+                    NavigationGraph.getInstance().back();
+                    continue;
+                }
+
+                Output.printOutput("Error");
+
             }
         }
     }
 
-    /**
-     * Changes the page to a new page
-     * Must verify first is the mutation is possible
-     * @param dest destination page
-     */
-    public void changePage(final String dest) {
-        getNavigationGraph().setCurrentPage(dest);
-        setCurrentPage(PageFactory.getPageByName(dest));
-    }
 
     public UserDB getUserDB() {
         return userDB;
@@ -120,14 +122,6 @@ public final class AppManager {
 
     public void setMovieDB(final MovieDB movieDB) {
         this.movieDB = movieDB;
-    }
-
-    public NavigationGraph getNavigationGraph() {
-        return navigationGraph;
-    }
-
-    public void setNavigationGraph(final NavigationGraph navigationGraph) {
-        this.navigationGraph = navigationGraph;
     }
 
     public User getCurrentUser() {
@@ -153,15 +147,6 @@ public final class AppManager {
     public void setOutput(final ArrayNode output) {
         this.output = output;
     }
-
-    public Page getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(final Page currentPage) {
-        this.currentPage = currentPage;
-    }
-
     public String getSelectedMovie() {
         return selectedMovie;
     }

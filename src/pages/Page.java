@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public abstract class Page {
 
+    public String pageName;
     private ArrayList<String> events = new ArrayList<>();
 
     /**

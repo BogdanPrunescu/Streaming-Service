@@ -23,6 +23,16 @@ public final class MovieDB {
     }
 
     /**
+     * Remove element into movie database
+     * @param movieInput movie that needs to be added
+     */
+    void removeElement(final MovieInput movieInput) {
+        if (movies != null) {
+            movies.removeIf((Movie m) -> m.getName().equals(movieInput.getName()));
+        }
+    }
+
+    /**
      * apply filters to the movie databate
      * @param filter filters
      * @return a new array containing movies filtered

@@ -1,12 +1,10 @@
 package events;
 
-import manager.AppManager;
-import manager.Movie;
-import manager.Output;
-import manager.User;
+import manager.*;
 import fileio.ActionInput;
 import fileio.Credentials;
 import fileio.Filters;
+import pages.Page;
 
 import java.util.ArrayList;
 
@@ -90,10 +88,19 @@ public final class OnPageVisitor {
     public void visit(final LoginEv loginEv, final Object dependency) {
         Credentials credentials = ((ActionInput) dependency).getCredentials();
         if (!AppManager.getInstance().getUserDB().findElement(new User(credentials))) {
-            AppManager.getInstance().changePage("authpage");
+
+            Page newPage = PageFactory.getPageByName("authpage");
+            ChangePageCommand command = new ChangePageCommand(
+                    NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+            NavigationGraph.getInstance().changePage(command);
+
             Output.printOutput("Error");
         } else {
-            AppManager.getInstance().changePage("homepage");
+            Page newPage = PageFactory.getPageByName("homepage");
+            ChangePageCommand command = new ChangePageCommand(
+                    NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+            NavigationGraph.getInstance().changePage(command);
+
             AppManager.getInstance().setCurrentUser(
                     AppManager.getInstance().getUserDB().getElement(new User(credentials)));
             Output.printOutput(null);
@@ -166,7 +173,12 @@ public final class OnPageVisitor {
         User newUser = new User(credentials);
         AppManager.getInstance().getUserDB().addElement(newUser);
         AppManager.getInstance().setCurrentUser(newUser);
-        AppManager.getInstance().changePage("homepage");
+
+        Page newPage = PageFactory.getPageByName("homepage");
+        ChangePageCommand command = new ChangePageCommand(
+                NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+        NavigationGraph.getInstance().changePage(command);
+
         Output.printOutput(null);
     }
 
