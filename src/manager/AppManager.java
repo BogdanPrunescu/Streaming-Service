@@ -94,6 +94,15 @@ public final class AppManager {
             } else if (action.getType().equals("database")) {
 
             } else if (action.getType().equals("subscribe")) {
+                if (NavigationGraph.getInstance().getCurrentPage().pageName.equals("see details")) {
+                    for (String genre : currentMoviesList.get(0).getGenres()) {
+                        if (genre.equals(action.getSubscribedGenre())) {
+                            // subscribe to genre
+                        }
+                    }
+                }
+
+                Output.printOutput("Error");
 
             } else if (action.getType().equals("back")) {
                 if (currentUser != null) {

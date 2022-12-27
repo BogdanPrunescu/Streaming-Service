@@ -6,7 +6,7 @@ import java.util.Arrays;
 public final class SeeDetails extends Page {
 
     {
-        super.pageName = "seedetails";
+        super.pageName = "see details";
         this.setEvents(new ArrayList<>(Arrays.asList("purchase",
                 "watch", "like", "rate")));
     }

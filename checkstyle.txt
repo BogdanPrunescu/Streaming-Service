@@ -15,7 +15,7 @@ Starting audit...
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\AppManager.java:72: Line is longer than 100 characters (found 116). [LineLength]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\AppManager.java:85: Line is longer than 100 characters (found 118). [LineLength]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\AppManager.java:94:61: Must have at least one statement. [EmptyBlock]
-[ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\AppManager.java:96:62: Must have at least one statement. [EmptyBlock]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\AppManager.java:99:72: Must have at least one statement. [EmptyBlock]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\ChangePageCommand.java:9:17: Variable 'previousPage' must be private and have accessor methods. [VisibilityModifier]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\ChangePageCommand.java:13:30: Parameter navigationGraph should be final. [FinalParameters]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\ChangePageCommand.java:13:63: Parameter previousPage should be final. [FinalParameters]
