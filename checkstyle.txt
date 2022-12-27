@@ -1,0 +1,11 @@
+Starting audit...
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\Movie.java:38:40: Name 'df' must match pattern '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$'. [ConstantName]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\Movie.java:42:47: '100' is a magic number. [MagicNumber]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\Movie.java:42:54: '100' is a magic number. [MagicNumber]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:1: File does not end with a newline. [NewlineAtEndOfFile]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:9:28: Using the '.*' form of import should be avoided - java.util.concurrent.*. [AvoidStarImport]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:158: Line is longer than 100 characters (found 108). [LineLength]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:206:65: Parameter testFileName should be final. [FinalParameters]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:223: Line is longer than 100 characters (found 108). [LineLength]
+Audit done.
+Checkstyle ends with 8 errors.

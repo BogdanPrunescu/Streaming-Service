@@ -18,8 +18,7 @@
     "purchasedMovies" : [ ],
     "watchedMovies" : [ ],
     "likedMovies" : [ ],
-    "ratedMovies" : [ ],
-    "notifications" : [ ]
+    "ratedMovies" : [ ]
   }
 }, {
   "error" : "Error",
@@ -49,11 +48,6 @@
     "purchasedMovies" : [ ],
     "watchedMovies" : [ ],
     "likedMovies" : [ ],
-    "ratedMovies" : [ ],
-    "notifications" : [ ]
+    "ratedMovies" : [ ]
   }
-}, {
-  "error" : "Error",
-  "currentMoviesList" : [ ],
-  "currentUser" : null
 } ]
