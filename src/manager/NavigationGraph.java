@@ -62,8 +62,6 @@ public final class NavigationGraph {
         if (instance.history != null && AppManager.getInstance().getCurrentUser() != null)
             instance.history.push(command);
         command.execute();
-        System.out.println("push " + history);
-        System.out.println();
     }
 
     public void back() {
@@ -71,8 +69,6 @@ public final class NavigationGraph {
             Output.printOutput("Error");
         } else {
             ChangePageCommand command = instance.history.pop();
-            System.out.println("pop " + history);
-            System.out.println();
             if (command != null) {
                 command.undo();
             }

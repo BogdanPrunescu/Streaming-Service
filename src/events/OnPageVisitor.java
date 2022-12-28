@@ -70,10 +70,15 @@ public final class OnPageVisitor {
     public void visit(final LikeEv likeEv, final Object dependency) {
 
         Movie movieSelected = AppManager.getInstance().getCurrentMoviesList().get(0);
+        User currentUser = AppManager.getInstance().getCurrentUser();
 
-        if (AppManager.getInstance().getCurrentUser().getWatchedMovies().contains(movieSelected)) {
+        if (currentUser.getLikedMovies().contains(movieSelected)) {
+            return;
+        }
+
+        if (currentUser.getWatchedMovies().contains(movieSelected)) {
             AppManager.getInstance().getMovieDB().likeMovie(movieSelected);
-            AppManager.getInstance().getCurrentUser().getLikedMovies().add(movieSelected);
+            currentUser.getLikedMovies().add(movieSelected);
             Output.printOutput(null);
         } else {
             Output.printOutput("Error");
@@ -115,22 +120,28 @@ public final class OnPageVisitor {
     public void visit(final PurchaseEv purchaseEv, final Object dependency) {
 
         boolean canBuyMovie = false;
+        User currentUser = AppManager.getInstance().getCurrentUser();
 
-        if (AppManager.getInstance().getCurrentUser().getCredentials().getAccountType().equals("premium")
-                && AppManager.getInstance().getCurrentUser().getNumFreePremiumMovies() > 0) {
-                AppManager.getInstance().getCurrentUser().setNumFreePremiumMovies(
-                        AppManager.getInstance().getCurrentUser().getNumFreePremiumMovies() - 1);
+        // film was already bought
+        if (currentUser.getPurchasedMovies().contains(
+                AppManager.getInstance().getCurrentMoviesList().get(0))) {
+            Output.printOutput("Error");
+            return;
+        }
+
+        if (currentUser.getCredentials().getAccountType().equals("premium")
+                && currentUser.getNumFreePremiumMovies() > 0) {
+            currentUser.setNumFreePremiumMovies(currentUser.getNumFreePremiumMovies() - 1);
                 canBuyMovie = true;
         } else {
-            if (AppManager.getInstance().getCurrentUser().getTokensCount() - 2 > 0) {
-                AppManager.getInstance().getCurrentUser().setTokensCount(
-                        AppManager.getInstance().getCurrentUser().getTokensCount() - 2);
+            if (currentUser.getTokensCount() - 2 > 0) {
+                currentUser.setTokensCount(currentUser.getTokensCount() - 2);
                 canBuyMovie = true;
             }
         }
 
         if (canBuyMovie) {
-            AppManager.getInstance().getCurrentUser().getPurchasedMovies().addAll(
+            currentUser.getPurchasedMovies().addAll(
                     AppManager.getInstance().getCurrentMoviesList());
             Output.printOutput(null);
         } else {
@@ -146,6 +157,7 @@ public final class OnPageVisitor {
     public void visit(final RateEv rateEv, final Object dependency) {
 
         Movie movieSelected = AppManager.getInstance().getCurrentMoviesList().get(0);
+        User currentUser = AppManager.getInstance().getCurrentUser();
 
         int rate = ((ActionInput) dependency).getRate();
 
@@ -154,9 +166,10 @@ public final class OnPageVisitor {
             return;
         }
 
-        if (AppManager.getInstance().getCurrentUser().getWatchedMovies().contains(movieSelected)) {
-            AppManager.getInstance().getMovieDB().rateMovie(movieSelected, rate);
-            AppManager.getInstance().getCurrentUser().getRatedMovies().add(movieSelected);
+        if (currentUser.getWatchedMovies().contains(movieSelected)) {
+            boolean hadRated = AppManager.getInstance().getMovieDB().rateMovie(movieSelected, rate);
+            if (!hadRated)
+                currentUser.getRatedMovies().add(movieSelected);
             Output.printOutput(null);
         } else {
             Output.printOutput("Error");
@@ -171,6 +184,12 @@ public final class OnPageVisitor {
     public void visit(final RegisterEv registerEv, final Object dependency) {
         Credentials credentials = ((ActionInput) dependency).getCredentials();
         User newUser = new User(credentials);
+
+        if (AppManager.getInstance().getUserDB().findElement(newUser)) {
+            Output.printOutput("Error");
+            return;
+        }
+
         AppManager.getInstance().getUserDB().addElement(newUser);
         AppManager.getInstance().setCurrentUser(newUser);
 
@@ -200,9 +219,16 @@ public final class OnPageVisitor {
      */
     public void visit(final WatchEv watchEv, final Object dependency) {
 
-        if (AppManager.getInstance().getCurrentUser().getPurchasedMovies().contains(
+        User currentUser = AppManager.getInstance().getCurrentUser();
+
+        if (currentUser.getWatchedMovies().contains(
                 AppManager.getInstance().getCurrentMoviesList().get(0))) {
-            AppManager.getInstance().getCurrentUser().getWatchedMovies().addAll(
+            return;
+        }
+
+        if (currentUser.getPurchasedMovies().contains(
+                AppManager.getInstance().getCurrentMoviesList().get(0))) {
+            currentUser.getWatchedMovies().addAll(
                     AppManager.getInstance().getCurrentMoviesList());
             Output.printOutput(null);
         } else {

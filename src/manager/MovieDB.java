@@ -2,10 +2,9 @@ package manager;
 
 import fileio.Filters;
 import fileio.MovieInput;
+import subscribeaction.SubscribeManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public final class MovieDB {
     private ArrayList<Movie> movies;
@@ -15,20 +14,56 @@ public final class MovieDB {
      * @param movieInput movie that needs to be added
      */
     void addElement(final MovieInput movieInput) {
+
         if (movies == null) {
             movies = new ArrayList<>();
         }
         Movie movie = new Movie(movieInput);
-        movies.add(movie);
+
+        boolean isPresent = false;
+        for (Movie m : movies) {
+            if (m.getName().equals(movie.getName()))
+                isPresent = true;
+        }
+
+        if (isPresent) {
+            Output.printOutput("Error");
+        } else {
+            movies.add(movie);
+
+            for (String genre : movie.getGenres()) {
+                AppManager.getInstance().getSubscribeManager().notify(genre, movie.getName(), "ADD");
+            }
+        }
     }
 
     /**
-     * Remove element into movie database
-     * @param movieInput movie that needs to be added
+     * Remove element from movie database
+     * @param movieName movie that needs to be removed
      */
-    void removeElement(final MovieInput movieInput) {
+    void removeElement(final String movieName) {
+        boolean isDeleted = false;
         if (movies != null) {
-            movies.removeIf((Movie m) -> m.getName().equals(movieInput.getName()));
+            for (Movie m : movies) {
+                if (m.getName().equals(movieName)) {
+                    for (String genre : m.getGenres()) {
+                        AppManager.getInstance().getSubscribeManager().notify(genre, movieName, "DELETE");
+                    }
+
+                    isDeleted = true;
+                    movies.remove(m);
+                    for (User u : AppManager.getInstance().getUserDB().getUsers()) {
+                        u.getPurchasedMovies().removeIf(movie -> (movie.equals(m)));
+                        u.getWatchedMovies().removeIf(movie -> (movie.equals(m)));
+                        u.getLikedMovies().removeIf(movie -> (movie.equals(m)));
+                        u.getRatedMovies().removeIf(movie -> (movie.equals(m)));
+                    }
+                    break;
+                }
+            }
+        }
+        if (!isDeleted) {
+            Output.printOutput("Error");
         }
     }
 
@@ -205,27 +240,37 @@ public final class MovieDB {
      * Action that rates a movie
      * @param ratedMovie
      * @param rate
+     * @return true if the user that rated the movie had rated the movie before
      */
-    public void rateMovie(final Movie ratedMovie, final int rate) {
+    public boolean rateMovie(final Movie ratedMovie, final int rate) {
+
+        boolean hadRated = false;
 
         for (Movie movie : movies) {
             if (movie.getName().equals(ratedMovie.getName())) {
 
-                movie.getRatings().add(rate);
+                Integer value = movie.getUserRatings().remove(AppManager.getInstance().getCurrentUser().getCredentials().getName());
+                movie.getUserRatings().putIfAbsent(AppManager.getInstance().getCurrentUser().getCredentials().getName(), rate);
+
+                if (value != null)
+                    hadRated = true;
 
                 int sum = 0;
+                int size = 0;
 
-                for (Integer rateidx : movie.getRatings()) {
-                    sum += rateidx;
+                for (Map.Entry<String, Integer> entry : movie.getUserRatings().entrySet()) {
+                    sum += entry.getValue();
+                    size++;
                 }
 
-                movie.setRating(1. * sum / movie.getRatings().size());
-
-                movie.setNumRatings(movie.getNumRatings() + 1);
+                movie.setRating(1. * sum / size);
+                movie.setNumRatings(size);
 
                 break;
             }
         }
+
+        return hadRated;
 
     }
 }

@@ -1,9 +1,12 @@
 package manager;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fileio.Credentials;
 import fileio.UserInput;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public final class User {
@@ -21,9 +24,14 @@ public final class User {
     private ArrayList<Movie> ratedMovies = new ArrayList<>();
     private ArrayList<Notification> notifications = new ArrayList<>();
 
-    private static final class Notification {
+    public static final class Notification {
         private String movieName;
         private String message;
+
+        public Notification(String movieName, String message) {
+            this.movieName = movieName;
+            this.message = message;
+        }
 
         public String getMovieName() {
             return movieName;
@@ -39,6 +47,24 @@ public final class User {
 
         public void setMessage(String message) {
             this.message = message;
+        }
+    }
+
+    public void update(String movieName, String message) {
+        Notification notification = new Notification(movieName, message);
+        notifications.add(notification);
+        if (message.equals("DELETE")) {
+            for (Movie m : purchasedMovies) {
+                if (m.getName().equals(movieName)) {
+
+                    if (this.credentials.getAccountType().equals("standard")) {
+                        this.credentials.setBalance(this.credentials.getBalance() + 2);
+
+                    } else if (this.credentials.getAccountType().equals("premium")) {
+                        this.numFreePremiumMovies++;
+                    }
+                }
+            }
         }
     }
 
@@ -60,7 +86,7 @@ public final class User {
 
     public User(final Credentials credentials) {
         this.setCredentials(credentials);
-        setTokensCount(0);
+        this.setTokensCount(0);
     }
 
     public User(final User user) {

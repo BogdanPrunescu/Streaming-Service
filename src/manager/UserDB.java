@@ -31,7 +31,11 @@ public final class UserDB {
         if (users == null) {
             users = new ArrayList<>();
         }
-        users.add(user);
+        if (users.contains(user)) {
+            Output.printOutput("error");
+        } else {
+            users.add(user);
+        }
     }
 
     /**
@@ -67,5 +71,13 @@ public final class UserDB {
             }
         }
         return null;
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
     }
 }

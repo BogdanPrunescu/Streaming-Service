@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class Movie {
 
@@ -18,7 +20,7 @@ public final class Movie {
     private ArrayList<String> actors;
     private ArrayList<String> countriesBanned;
     @JsonIgnore
-    private ArrayList<Integer> ratings = new ArrayList<>();
+    private Map<String, Integer> userRatings = new HashMap<>();
     private int numLikes;
     private double rating;
     private int numRatings;
@@ -30,10 +32,18 @@ public final class Movie {
         this.genres = movie.genres;
         this.actors = movie.actors;
         this.countriesBanned = movie.countriesBanned;
-        this.ratings = movie.ratings;
+        this.userRatings = movie.userRatings;
         this.numLikes = movie.numLikes;
         this.rating = movie.rating;
         this.numRatings = movie.numRatings;
+    }
+    public Movie(final MovieInput movieInput) {
+        this.setName(movieInput.getName());
+        this.setYear(movieInput.getYear());
+        this.setDuration(movieInput.getDuration());
+        this.setActors(movieInput.getActors());
+        this.setGenres(movieInput.getGenres());
+        this.setCountriesBanned(movieInput.getCountriesBanned());
     }
 
     @JsonProperty("rating")
@@ -46,15 +56,6 @@ public final class Movie {
     @JsonProperty("year")
     public String jsonPrintYear() {
         return ((Integer) year).toString();
-    }
-
-    public Movie(final MovieInput movieInput) {
-        this.setName(movieInput.getName());
-        this.setYear(movieInput.getYear());
-        this.setDuration(movieInput.getDuration());
-        this.setActors(movieInput.getActors());
-        this.setGenres(movieInput.getGenres());
-        this.setCountriesBanned(movieInput.getCountriesBanned());
     }
 
     public String getName() {
@@ -97,14 +98,6 @@ public final class Movie {
         this.rating = rating;
     }
 
-    public int getNumRatings() {
-        return numRatings;
-    }
-
-    public void setNumRatings(final int numRatings) {
-        this.numRatings = numRatings;
-    }
-
     public ArrayList<String> getGenres() {
         return genres;
     }
@@ -129,11 +122,19 @@ public final class Movie {
         this.countriesBanned = countriesBanned;
     }
 
-    public ArrayList<Integer> getRatings() {
-        return ratings;
+    public Map<String, Integer> getUserRatings() {
+        return userRatings;
     }
 
-    public void setRatings(final ArrayList<Integer> ratings) {
-        this.ratings = ratings;
+    public void setUserRatings(Map<String, Integer> userRatings) {
+        this.userRatings = userRatings;
+    }
+
+    public int getNumRatings() {
+        return numRatings;
+    }
+
+    public void setNumRatings(int numRatings) {
+        this.numRatings = numRatings;
     }
 }

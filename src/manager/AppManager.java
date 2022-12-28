@@ -1,17 +1,15 @@
 package manager;
 
+import fileio.*;
 import pages.Authpage;
 import pages.ChangePageVisitor;
 import pages.Page;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import events.Event;
 import events.OnPageVisitor;
-import fileio.ActionInput;
-import fileio.Input;
-import fileio.MovieInput;
-import fileio.UserInput;
+import subscribeaction.SubscribeManager;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public final class AppManager {
 
@@ -31,6 +29,7 @@ public final class AppManager {
     private ArrayList<Movie> currentMoviesList;
     private ArrayNode output;
     private String selectedMovie = null;
+    private SubscribeManager subscribeManager;
 
     /**
      * Initialize the platform
@@ -40,6 +39,8 @@ public final class AppManager {
     public void initiateApp(final Input input, final ArrayNode myOutput) {
 
        NavigationGraph.getInstance().initiateNavigationSystem();
+
+       subscribeManager = new SubscribeManager();
 
        setUserDB(new UserDB());
        for (UserInput user : input.getUsers()) {
@@ -54,7 +55,7 @@ public final class AppManager {
        setOutput(myOutput);
        setCurrentMoviesList(new ArrayList<>());
 
-        startApp(input);
+       startApp(input);
     }
 
     private void startApp(final Input input) {
@@ -78,10 +79,8 @@ public final class AppManager {
                     NavigationGraph.getInstance().getCurrentPage().accept(visitor);
 
                     setSelectedMovie(null);
-                    System.out.println(NavigationGraph.getInstance().getCurrentPage());
                     continue;
                 }
-                System.out.println("Sunt PROST!");
                 Output.printOutput("Error");
 
             } else if (action.getType().equals("on page")) {
@@ -99,21 +98,25 @@ public final class AppManager {
             } else if (action.getType().equals("database")) {
 
                 if (action.getFeature().equals("add")) {
+                    movieDB.addElement(action.getAddedMovie());
 
                 } else if (action.getFeature().equals("delete")) {
-                    
+                    movieDB.removeElement(action.getDeletedMovie());
                 }
 
             } else if (action.getType().equals("subscribe")) {
+                boolean canSubscribe = false;
                 if (NavigationGraph.getInstance().getCurrentPage().pageName.equals("see details")) {
                     for (String genre : currentMoviesList.get(0).getGenres()) {
                         if (genre.equals(action.getSubscribedGenre())) {
-                            // subscribe to genre
+                            subscribeManager.subscribe(currentUser, genre);
+                            canSubscribe = true;
                         }
                     }
                 }
-
-                Output.printOutput("Error");
+                if (!canSubscribe) {
+                    Output.printOutput("Error");
+                }
 
             } else if (action.getType().equals("back")) {
                 if (currentUser != null) {
@@ -122,11 +125,30 @@ public final class AppManager {
                     ChangePageVisitor visitor = new ChangePageVisitor();
                     NavigationGraph.getInstance().getCurrentPage().accept(visitor);
 
-                    System.out.println(NavigationGraph.getInstance().getCurrentPage());
                     continue;
                 }
                 Output.printOutput("Error");
 
+            }
+        }
+        if (currentUser != null) {
+            if (currentUser.getCredentials().getAccountType().equals("premium")) {
+                ArrayList<Movie> likedMovies = currentUser.getLikedMovies();
+                ArrayList<Movie> movieArrayList = movieDB.getMoviesOfUser(currentUser);
+                Map<String, List<Integer>> likedgenres = new HashMap<>();
+
+                for (Movie m : likedMovies) {
+                    for (String genre : m.getGenres()) {
+
+
+                    }
+                }
+                Collections.sort(movieArrayList, new Comparator<Movie>() {
+                    @Override
+                    public int compare(Movie o1, Movie o2) {
+                        return 0;
+                    }
+                });
             }
         }
     }
@@ -177,5 +199,13 @@ public final class AppManager {
 
     public void setSelectedMovie(final String selectedMovie) {
         this.selectedMovie = selectedMovie;
+    }
+
+    public SubscribeManager getSubscribeManager() {
+        return subscribeManager;
+    }
+
+    public void setSubscribeManager(SubscribeManager subscribeManager) {
+        this.subscribeManager = subscribeManager;
     }
 }
