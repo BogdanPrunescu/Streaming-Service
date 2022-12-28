@@ -30,7 +30,6 @@ public final class AppManager {
     private User currentUser = null;
     private ArrayList<Movie> currentMoviesList;
     private ArrayNode output;
-    private Page currentPage;
     private String selectedMovie = null;
 
     /**
@@ -64,7 +63,6 @@ public final class AppManager {
 
             if (action.getType().equals("change page")) {
 
-                ChangePageVisitor visitor = new ChangePageVisitor();
                 if (NavigationGraph.getInstance().isPageAvailable(action.getPage())) {
 
                     Page newPage = PageFactory.getPageByName(action.getPage());
@@ -75,11 +73,17 @@ public final class AppManager {
                     if (action.getMovie() != null) {
                         setSelectedMovie(action.getMovie());
                     }
+
+                    ChangePageVisitor visitor = new ChangePageVisitor();
                     NavigationGraph.getInstance().getCurrentPage().accept(visitor);
+
                     setSelectedMovie(null);
-                } else {
-                    Output.printOutput("Error");
+                    System.out.println(NavigationGraph.getInstance().getCurrentPage());
+                    continue;
                 }
+                System.out.println("Sunt PROST!");
+                Output.printOutput("Error");
+
             } else if (action.getType().equals("on page")) {
                 if (!NavigationGraph.getInstance().getCurrentPage().getEvents().isEmpty()
                         && NavigationGraph.getInstance().getCurrentPage().getEvents().contains(action.getFeature())) {
@@ -91,7 +95,14 @@ public final class AppManager {
                     continue;
                 }
                 Output.printOutput("Error");
+
             } else if (action.getType().equals("database")) {
+
+                if (action.getFeature().equals("add")) {
+
+                } else if (action.getFeature().equals("delete")) {
+                    
+                }
 
             } else if (action.getType().equals("subscribe")) {
                 if (NavigationGraph.getInstance().getCurrentPage().pageName.equals("see details")) {
@@ -107,9 +118,13 @@ public final class AppManager {
             } else if (action.getType().equals("back")) {
                 if (currentUser != null) {
                     NavigationGraph.getInstance().back();
+
+                    ChangePageVisitor visitor = new ChangePageVisitor();
+                    NavigationGraph.getInstance().getCurrentPage().accept(visitor);
+
+                    System.out.println(NavigationGraph.getInstance().getCurrentPage());
                     continue;
                 }
-
                 Output.printOutput("Error");
 
             }

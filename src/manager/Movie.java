@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fileio.MovieInput;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -34,12 +36,16 @@ public final class Movie {
         this.numRatings = movie.numRatings;
     }
 
-    @JsonIgnore
-    private static final DecimalFormat df = new DecimalFormat("0.00");
-
     @JsonProperty("rating")
-    public double getRatingFormat() {
-        return ((double) ((int) this.rating * 100) / 100);
+    public BigDecimal jsonPrintRating() {
+        BigDecimal bd = new BigDecimal(rating);
+        bd = bd.setScale(2, RoundingMode.DOWN);
+        return bd;
+    }
+
+    @JsonProperty("year")
+    public String jsonPrintYear() {
+        return ((Integer) year).toString();
     }
 
     public Movie(final MovieInput movieInput) {

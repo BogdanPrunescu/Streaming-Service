@@ -8,7 +8,7 @@ public class ChangePageCommand {
 
     public Page previousPage;
 
-    private Page newPage;
+    public Page newPage;
 
     public ChangePageCommand(NavigationGraph navigationGraph, Page previousPage, Page newPage) {
         this.navigationGraph = navigationGraph;
@@ -29,8 +29,14 @@ public class ChangePageCommand {
     }
 
     public void undo() {
-        newPage = previousPage;
-        previousPage = navigationGraph.getCurrentPage();
-        navigationGraph.setCurrentPage(newPage);
+        navigationGraph.setCurrentPage(previousPage);
+    }
+
+    @Override
+    public String toString() {
+        return "ChangePageCommand{" +
+                ", previousPage=" + previousPage +
+                ", newPage=" + newPage +
+                '}';
     }
 }

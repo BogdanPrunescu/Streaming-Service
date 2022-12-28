@@ -37,7 +37,6 @@ public final class ChangePageVisitor {
      * @param visitor
      */
     public void visit(final Homepage visitor) {
-        NavigationGraph.getInstance().historyInit();
         return;
     }
 

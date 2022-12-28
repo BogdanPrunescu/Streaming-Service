@@ -1,6 +1,7 @@
 package manager;
 
 import pages.Authpage;
+import pages.Homepage;
 import pages.Page;
 
 import java.util.*;
@@ -11,7 +12,7 @@ public final class NavigationGraph {
 
     private static NavigationGraph instance = null;
 
-    public LinkedList<ChangePageCommand> history;
+    private LinkedList<ChangePageCommand> history;
     private NavigationGraph() { }
 
     public static NavigationGraph getInstance() {
@@ -58,9 +59,11 @@ public final class NavigationGraph {
     }
 
     public void changePage(ChangePageCommand command) {
-        if (instance.history != null)
+        if (instance.history != null && AppManager.getInstance().getCurrentUser() != null)
             instance.history.push(command);
         command.execute();
+        System.out.println("push " + history);
+        System.out.println();
     }
 
     public void back() {
@@ -68,6 +71,8 @@ public final class NavigationGraph {
             Output.printOutput("Error");
         } else {
             ChangePageCommand command = instance.history.pop();
+            System.out.println("pop " + history);
+            System.out.println();
             if (command != null) {
                 command.undo();
             }
@@ -80,6 +85,7 @@ public final class NavigationGraph {
 
     public void historyInit() {
         instance.history = new LinkedList<>();
+        instance.history.push(new ChangePageCommand(instance, null, new Homepage()));
     }
 
     /**
