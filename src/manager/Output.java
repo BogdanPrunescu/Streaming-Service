@@ -37,10 +37,14 @@ public final class Output {
     public Output(final String error, final ArrayList<Movie> currentMoviesList,
                   final User currentUser) {
         this.error = error;
-        this.currentMoviesList = new ArrayList<>();
-        for (Movie movie : currentMoviesList) {
-            this.currentMoviesList.add(new Movie(movie));
+        this.currentMoviesList = null;
+        if (currentMoviesList != null) {
+            this.currentMoviesList = new ArrayList<>();
+            for (Movie movie : currentMoviesList) {
+                this.currentMoviesList.add(new Movie(movie));
+            }
         }
+
         if (currentUser != null) {
             this.currentUser = new User(currentUser);
         }

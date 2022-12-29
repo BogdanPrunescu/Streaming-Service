@@ -85,10 +85,7 @@ public final class ChangePageVisitor {
             }
         }
         if (selectedMovie == null) {
-            Page newPage = PageFactory.getPageByName("movies");
-            ChangePageCommand command = new ChangePageCommand(
-                    NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
-            NavigationGraph.getInstance().changePage(command);
+            NavigationGraph.getInstance().back();
             Output.printOutput("Error");
         } else {
             AppManager.getInstance().setCurrentMoviesList(new ArrayList<>(Arrays.asList(selectedMovie)));

@@ -33,6 +33,11 @@ public final class User {
             this.message = message;
         }
 
+        public Notification(Notification notification) {
+            this.movieName = notification.getMovieName();
+            this.message = notification.message;
+        }
+
         public String getMovieName() {
             return movieName;
         }
@@ -105,6 +110,10 @@ public final class User {
         }
         for (Movie movie : user.ratedMovies) {
             this.ratedMovies.add(new Movie(movie));
+        }
+
+        for (Notification notification : user.notifications) {
+            this.notifications.add(new Notification(notification));
         }
 
     }

@@ -119,11 +119,11 @@ public final class AppManager {
                 }
 
             } else if (action.getType().equals("back")) {
-                if (currentUser != null) {
+                if (currentUser != null && !NavigationGraph.getInstance().getCurrentPage().pageName.equals("homepage")) {
                     NavigationGraph.getInstance().back();
 
                     ChangePageVisitor visitor = new ChangePageVisitor();
-                    NavigationGraph.getInstance().getCurrentPage().accept(visitor);
+                        NavigationGraph.getInstance().getCurrentPage().accept(visitor);
 
                     continue;
                 }
@@ -131,24 +131,59 @@ public final class AppManager {
 
             }
         }
+
+        // show recommendation
         if (currentUser != null) {
             if (currentUser.getCredentials().getAccountType().equals("premium")) {
                 ArrayList<Movie> likedMovies = currentUser.getLikedMovies();
+                Map<String, Integer> likedgenres = new HashMap<>();
+
                 ArrayList<Movie> movieArrayList = movieDB.getMoviesOfUser(currentUser);
-                Map<String, List<Integer>> likedgenres = new HashMap<>();
+                Collections.sort(movieArrayList, (o1, o2) -> o2.getNumLikes() - o1.getNumLikes());
 
                 for (Movie m : likedMovies) {
                     for (String genre : m.getGenres()) {
-
-
+                        if (likedgenres.containsKey(genre)) {
+                            likedgenres.replace(genre, likedgenres.get(genre) + 1);
+                        } else {
+                            likedgenres.put(genre, 1);
+                        }
                     }
                 }
-                Collections.sort(movieArrayList, new Comparator<Movie>() {
-                    @Override
-                    public int compare(Movie o1, Movie o2) {
-                        return 0;
+
+                while (!likedgenres.isEmpty()) {
+
+                    // find most liked genre
+                    String mostLikedGenre = null;
+                    Integer maxLikes = -1;
+                    for (Map.Entry<String, Integer> entry : likedgenres.entrySet()) {
+                        if (maxLikes < entry.getValue()) {
+                            maxLikes = entry.getValue();
+                            mostLikedGenre = entry.getKey();
+                        } else if (maxLikes.equals(entry.getValue())
+                                && mostLikedGenre.compareTo(entry.getKey()) < 0) {
+                            maxLikes = entry.getValue();
+                            mostLikedGenre = entry.getKey();
+                        }
                     }
-                });
+
+                    for (Movie m : movieArrayList) {
+                        if (m.getGenres().contains(mostLikedGenre)) {
+                            if (!currentUser.getWatchedMovies().contains(m)) {
+                                currentUser.update(m.getName(), "Recommendation");
+                                return;
+                            }
+                        }
+                    }
+
+                    likedgenres.remove(mostLikedGenre);
+                }
+
+                currentUser.update("No recommendation", "Recommendation");
+
+                currentMoviesList = null;
+                Output.printOutput(null);
+
             }
         }
     }
