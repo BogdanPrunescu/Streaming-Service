@@ -161,7 +161,7 @@ public final class AppManager {
                             maxLikes = entry.getValue();
                             mostLikedGenre = entry.getKey();
                         } else if (maxLikes.equals(entry.getValue())
-                                && mostLikedGenre.compareTo(entry.getKey()) < 0) {
+                                && mostLikedGenre.compareTo(entry.getKey()) > 0) {
                             maxLikes = entry.getValue();
                             mostLikedGenre = entry.getKey();
                         }
@@ -171,6 +171,8 @@ public final class AppManager {
                         if (m.getGenres().contains(mostLikedGenre)) {
                             if (!currentUser.getWatchedMovies().contains(m)) {
                                 currentUser.update(m.getName(), "Recommendation");
+                                currentMoviesList = null;
+                                Output.printOutput(null);
                                 return;
                             }
                         }

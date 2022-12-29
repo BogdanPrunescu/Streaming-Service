@@ -1,5 +1,6 @@
 package subscribeaction;
 
+import manager.Output;
 import manager.User;
 
 import java.util.ArrayList;
@@ -13,7 +14,13 @@ public class SubscribeManager {
 
     public void subscribe(User user, String genre) {
         List<User> users = subscribedUsers.get(genre);
-        if (users == null) users = new ArrayList<>();
+        if (users == null){
+            subscribedUsers.put(genre, new ArrayList<>());
+            users = subscribedUsers.get(genre);
+        } else if (users.contains(user)) {
+            Output.printOutput("Error");
+            return;
+        }
         users.add(user);
     }
 

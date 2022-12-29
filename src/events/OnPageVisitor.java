@@ -73,6 +73,7 @@ public final class OnPageVisitor {
         User currentUser = AppManager.getInstance().getCurrentUser();
 
         if (currentUser.getLikedMovies().contains(movieSelected)) {
+            Output.printOutput("Error");
             return;
         }
 
