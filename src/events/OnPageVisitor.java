@@ -36,11 +36,13 @@ public final class OnPageVisitor {
     public void visit(final BuyTokensEv buyTokensEv, final Object dependency) {
          int count = ((ActionInput) dependency).getCount();
          int userBalance = AppManager.getInstance().getCurrentUser().getCredentials().getBalance();
+         User currentUser = AppManager.getInstance().getCurrentUser();
+
          if (userBalance - count < 0) {
              Output.printOutput("Error");
          } else {
-             AppManager.getInstance().getCurrentUser().getCredentials().setBalance(userBalance - count);
-             AppManager.getInstance().getCurrentUser().setTokensCount(count);
+             currentUser.getCredentials().setBalance(userBalance - count);
+             currentUser.setTokensCount(currentUser.getTokensCount() + count);
          }
     }
 

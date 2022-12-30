@@ -59,8 +59,15 @@ public final class NavigationGraph {
     }
 
     public void changePage(ChangePageCommand command) {
-        if (instance.history != null && AppManager.getInstance().getCurrentUser() != null)
+        if (instance.history != null && AppManager.getInstance().getCurrentUser() != null) {
             instance.history.push(command);
+            /*
+            System.out.println("PUSH");
+            instance.history.forEach(c -> System.out.println(c.previousPage + "-" + c.newPage + " "));
+            System.out.println();
+
+             */
+        }
         command.execute();
     }
 
@@ -69,9 +76,17 @@ public final class NavigationGraph {
             Output.printOutput("Error");
         } else {
             ChangePageCommand command = instance.history.pop();
+
             if (command != null) {
                 command.undo();
             }
+            /*
+            System.out.println("POP");
+            instance.history.forEach(c -> System.out.println(c.previousPage + "-" + c.newPage + " "));
+            System.out.println(NavigationGraph.getInstance().getCurrentPage().pageName);
+            System.out.println();
+
+             */
         }
     }
 

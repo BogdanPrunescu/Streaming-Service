@@ -31,6 +31,8 @@ public final class AppManager {
     private String selectedMovie = null;
     private SubscribeManager subscribeManager;
 
+    public ActionInput myaction = null;
+
     /**
      * Initialize the platform
      * @param input
@@ -61,6 +63,8 @@ public final class AppManager {
     private void startApp(final Input input) {
 
         for (ActionInput action : input.getActions()) {
+
+            myaction = action;
 
             if (action.getType().equals("change page")) {
 
@@ -119,7 +123,13 @@ public final class AppManager {
                 }
 
             } else if (action.getType().equals("back")) {
-                if (currentUser != null && !NavigationGraph.getInstance().getCurrentPage().pageName.equals("homepage")) {
+
+                if (NavigationGraph.getInstance().getCurrentPage().pageName.equals("homepage")) {
+                    Output.printOutput("Error");
+                    continue;
+                }
+
+                if (currentUser != null) {
                     NavigationGraph.getInstance().back();
 
                     ChangePageVisitor visitor = new ChangePageVisitor();
@@ -127,6 +137,7 @@ public final class AppManager {
 
                     continue;
                 }
+
                 Output.printOutput("Error");
 
             }

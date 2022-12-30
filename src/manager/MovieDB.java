@@ -120,7 +120,7 @@ public final class MovieDB {
                             if (filter.getSort().getDuration().equals("decreasing")) {
                                 durationComp = o1.getDuration() < o2.getDuration();
                             } else {
-                                durationComp = o2.getDuration() >= o2.getDuration();
+                                durationComp = o2.getDuration() > o2.getDuration();
                             }
                         }
 

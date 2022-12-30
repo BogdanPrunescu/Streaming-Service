@@ -57,6 +57,11 @@ public final class User {
 
     public void update(String movieName, String message) {
         Notification notification = new Notification(movieName, message);
+
+        for (Notification n : notifications)
+            if (n.movieName.equals(movieName) && n.message.equals(message))
+                return;
+
         notifications.add(notification);
         if (message.equals("DELETE")) {
             for (Movie m : purchasedMovies) {
