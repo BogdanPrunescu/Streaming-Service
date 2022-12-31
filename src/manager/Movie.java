@@ -6,7 +6,6 @@ import fileio.MovieInput;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +45,10 @@ public final class Movie {
         this.setCountriesBanned(movieInput.getCountriesBanned());
     }
 
+    /**
+     * Function used to print rating with 2 decimals
+     * @return
+     */
     @JsonProperty("rating")
     public BigDecimal jsonPrintRating() {
         BigDecimal bd = new BigDecimal(rating);
@@ -53,6 +56,10 @@ public final class Movie {
         return bd;
     }
 
+    /**
+     * Function used to print year
+     * @return
+     */
     @JsonProperty("year")
     public String jsonPrintYear() {
         return ((Integer) year).toString();
@@ -126,7 +133,7 @@ public final class Movie {
         return userRatings;
     }
 
-    public void setUserRatings(Map<String, Integer> userRatings) {
+    public void setUserRatings(final Map<String, Integer> userRatings) {
         this.userRatings = userRatings;
     }
 
@@ -134,7 +141,7 @@ public final class Movie {
         return numRatings;
     }
 
-    public void setNumRatings(int numRatings) {
+    public void setNumRatings(final int numRatings) {
         this.numRatings = numRatings;
     }
 }

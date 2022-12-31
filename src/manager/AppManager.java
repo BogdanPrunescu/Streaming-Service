@@ -1,15 +1,19 @@
 package manager;
 
-import fileio.*;
-import pages.Authpage;
+import fileio.ActionInput;
+import fileio.Input;
+import fileio.MovieInput;
+import fileio.UserInput;
 import pages.ChangePageVisitor;
 import pages.Page;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import events.Event;
 import events.OnPageVisitor;
-import subscribeaction.SubscribeManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class AppManager {
 
@@ -17,6 +21,10 @@ public final class AppManager {
 
     private static AppManager instance = null;
 
+    /**
+     * get AppManager's instance
+     * @return instance
+     */
     public static AppManager getInstance() {
         if (instance == null) {
             instance = new AppManager();
@@ -30,8 +38,6 @@ public final class AppManager {
     private ArrayNode output;
     private String selectedMovie = null;
     private SubscribeManager subscribeManager;
-
-    public ActionInput myaction = null;
 
     /**
      * Initialize the platform
@@ -64,15 +70,15 @@ public final class AppManager {
 
         for (ActionInput action : input.getActions()) {
 
-            myaction = action;
-
             if (action.getType().equals("change page")) {
 
                 if (NavigationGraph.getInstance().isPageAvailable(action.getPage())) {
 
                     Page newPage = PageFactory.getPageByName(action.getPage());
+
                     ChangePageCommand command = new ChangePageCommand(
-                            NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+                            NavigationGraph.getInstance(),
+                            NavigationGraph.getInstance().getCurrentPage(), newPage);
                     NavigationGraph.getInstance().changePage(command);
 
                     if (action.getMovie() != null) {
@@ -89,7 +95,8 @@ public final class AppManager {
 
             } else if (action.getType().equals("on page")) {
                 if (!NavigationGraph.getInstance().getCurrentPage().getEvents().isEmpty()
-                        && NavigationGraph.getInstance().getCurrentPage().getEvents().contains(action.getFeature())) {
+                        && NavigationGraph.getInstance().getCurrentPage().
+                        getEvents().contains(action.getFeature())) {
 
                     Event newEvent = PageFactory.getEventByName(action.getFeature());
 
@@ -110,7 +117,8 @@ public final class AppManager {
 
             } else if (action.getType().equals("subscribe")) {
                 boolean canSubscribe = false;
-                if (NavigationGraph.getInstance().getCurrentPage().pageName.equals("see details")) {
+                if (NavigationGraph.getInstance().
+                        getCurrentPage().getPageName().equals("see details")) {
                     for (String genre : currentMoviesList.get(0).getGenres()) {
                         if (genre.equals(action.getSubscribedGenre())) {
                             subscribeManager.subscribe(currentUser, genre);
@@ -124,7 +132,8 @@ public final class AppManager {
 
             } else if (action.getType().equals("back")) {
 
-                if (NavigationGraph.getInstance().getCurrentPage().pageName.equals("homepage")) {
+                if (NavigationGraph.getInstance().
+                        getCurrentPage().getPageName().equals("homepage")) {
                     Output.printOutput("Error");
                     continue;
                 }
@@ -253,7 +262,7 @@ public final class AppManager {
         return subscribeManager;
     }
 
-    public void setSubscribeManager(SubscribeManager subscribeManager) {
+    public void setSubscribeManager(final SubscribeManager subscribeManager) {
         this.subscribeManager = subscribeManager;
     }
 }

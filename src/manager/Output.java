@@ -57,26 +57,12 @@ public final class Output {
     public static void printOutput(final String error) {
         Output output;
         if (error != null) {
-
-            /*
-            System.out.println(AppManager.getInstance().myaction.getType() + " " +
-                    AppManager.getInstance().myaction.getFeature());
-
-            System.out.println(NavigationGraph.getInstance().getCurrentPage());
-
-            if (AppManager.getInstance().myaction.getMovie() != null) {
-                System.out.println(AppManager.getInstance().myaction.getMovie());
-
-            }
-            System.out.println();
-
-             */
-
             output = new Output(error,
                     new ArrayList<>(), null);
         } else {
             output = new Output(null,
-                    AppManager.getInstance().getCurrentMoviesList(), AppManager.getInstance().getCurrentUser());
+                    AppManager.getInstance().getCurrentMoviesList(),
+                    AppManager.getInstance().getCurrentUser());
         }
         AppManager.getInstance().getOutput().addPOJO(output);
     }

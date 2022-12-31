@@ -1,0 +1,50 @@
+Prunescu Bogdan-Andrei 321CA
+
+Etapa 2 - POO TV
+
+Pentru aceasta etapa am scris doua noi clase:
+
+1. ChangePageCommand care se ocupa de actiunea de "change page"
+2. SubscribeManager care notifica si aboneaza utilizatorii
+
+Si am modificat cateva clase pentru a putea implementa noiile comenzi:
+
+NavigationGraph -> pentru functia de back m-am folosit de un Command Pattern
+pentru a retine comenzile de change page. Clasa ChangePageCommand retine atat
+pagina anterioara cat si pe cea noua si ea se ocupa de comutarea intre pagini.
+In plus am modificat clasa pentru a avea un Singleton.
+
+Clasele din pachetul fileio au fost modificate pentru a suporta noile inputuri.
+
+AppManager -> contine un Singleton si mai multe verificari ale actiunilor
+pentru noile comenzi.
+
+User -> acum contine o clasa interna Notification si o functie "update" care
+notifica utilizatorii abonati la genuri de filme de actualizari in baza de
+date a filmelor.
+
+In final, in acest proiect s-au folosit x design patternuri:
+
+1. Singleton -> clasele NavigationGraph si AppManager
+
+2. Factory -> pentru a schimba clasa pagini curente din NavigatonGraph. Acest
+pattern este folosit in AppManager la actiunea de change page si in clasa
+ChangePageVisitor cand pagina se schimba automat (Ex. la logout).
+
+3.Visitor -> pentru actiunea de change page si on page am creat in prima etapa
+doua clase: ChangePagevisitor si OnPageVisitor care implementeaza functii
+pentru fiecare pagina/eveniment care are loc.
+
+4. Command -> Pentru a putea implementa comanda back in clasa NavigationGraph
+am creat un Array de tipul ChangePageCommand "history" care retine toate
+comenzile de tipul change page valide. Cand schimbam pagina functia
+NavigationGraph.changePage este apelata. Aceasta la urma apeleaza functia
+execute a comenzii si schimba pagina.
+
+5. Observer -> Observatorii sunt utilizatorii iar obiectul observat este genul
+de film la care s-au abonat. In clasa SubscribeManager pentru fiecare gen este
+retinuta o lista de utilizatori abonati, iar cand un film ce contine genul
+abonat este adaugat sau eleiminat, toti utilizatorii abonati vor fi notificati.
+
+
+

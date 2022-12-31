@@ -3,7 +3,7 @@ package pages;
 public final class Authpage extends Page {
 
     {
-        super.pageName = "authpage";
+        super.setPageName("authpage");
     }
 
     @Override

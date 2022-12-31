@@ -1,9 +1,15 @@
 package events;
 
-import manager.*;
 import fileio.ActionInput;
 import fileio.Credentials;
 import fileio.Filters;
+import manager.AppManager;
+import manager.ChangePageCommand;
+import manager.Movie;
+import manager.NavigationGraph;
+import manager.Output;
+import manager.PageFactory;
+import manager.User;
 import pages.Page;
 
 import java.util.ArrayList;
@@ -53,7 +59,8 @@ public final class OnPageVisitor {
      */
     public void visit(final FilterEv filterEv, final Object dependency) {
         Filters filters = ((ActionInput) dependency).getFilters();
-        ArrayList<Movie> filteredList = AppManager.getInstance().getMovieDB().getMoviesbyFilters(filters);
+        ArrayList<Movie> filteredList =
+                AppManager.getInstance().getMovieDB().getMoviesbyFilters(filters);
 
         AppManager.getInstance().setCurrentMoviesList(new ArrayList<>());
         for (Movie movie : filteredList) {
@@ -99,14 +106,16 @@ public final class OnPageVisitor {
 
             Page newPage = PageFactory.getPageByName("authpage");
             ChangePageCommand command = new ChangePageCommand(
-                    NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+                    NavigationGraph.getInstance(),
+                    NavigationGraph.getInstance().getCurrentPage(), newPage);
             NavigationGraph.getInstance().changePage(command);
 
             Output.printOutput("Error");
         } else {
             Page newPage = PageFactory.getPageByName("homepage");
             ChangePageCommand command = new ChangePageCommand(
-                    NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+                    NavigationGraph.getInstance(),
+                    NavigationGraph.getInstance().getCurrentPage(), newPage);
             NavigationGraph.getInstance().changePage(command);
 
             AppManager.getInstance().setCurrentUser(
@@ -171,8 +180,9 @@ public final class OnPageVisitor {
 
         if (currentUser.getWatchedMovies().contains(movieSelected)) {
             boolean hadRated = AppManager.getInstance().getMovieDB().rateMovie(movieSelected, rate);
-            if (!hadRated)
+            if (!hadRated) {
                 currentUser.getRatedMovies().add(movieSelected);
+            }
             Output.printOutput(null);
         } else {
             Output.printOutput("Error");
@@ -198,7 +208,8 @@ public final class OnPageVisitor {
 
         Page newPage = PageFactory.getPageByName("homepage");
         ChangePageCommand command = new ChangePageCommand(
-                NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+                NavigationGraph.getInstance(),
+                NavigationGraph.getInstance().getCurrentPage(), newPage);
         NavigationGraph.getInstance().changePage(command);
 
         Output.printOutput(null);
@@ -211,7 +222,8 @@ public final class OnPageVisitor {
      */
     public void visit(final SearchEv searchEv, final Object dependency) {
         String searchString = ((ActionInput) dependency).getStartsWith();
-        AppManager.getInstance().setCurrentMoviesList(AppManager.getInstance().getMovieDB().getMoviesbyStart(searchString));
+        AppManager.getInstance().setCurrentMoviesList(AppManager.getInstance().
+                getMovieDB().getMoviesbyStart(searchString));
         Output.printOutput(null);
     }
 

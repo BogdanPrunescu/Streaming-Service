@@ -2,9 +2,11 @@ package manager;
 
 import fileio.Filters;
 import fileio.MovieInput;
-import subscribeaction.SubscribeManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Map;
 
 public final class MovieDB {
     private ArrayList<Movie> movies;
@@ -22,8 +24,9 @@ public final class MovieDB {
 
         boolean isPresent = false;
         for (Movie m : movies) {
-            if (m.getName().equals(movie.getName()))
+            if (m.getName().equals(movie.getName())) {
                 isPresent = true;
+            }
         }
 
         if (isPresent) {
@@ -32,7 +35,8 @@ public final class MovieDB {
             movies.add(movie);
 
             for (String genre : movie.getGenres()) {
-                AppManager.getInstance().getSubscribeManager().notify(genre, movie.getName(), "ADD");
+                AppManager.getInstance().getSubscribeManager()
+                        .notify(genre, movie.getName(), "ADD");
             }
         }
     }
@@ -47,7 +51,8 @@ public final class MovieDB {
             for (Movie m : movies) {
                 if (m.getName().equals(movieName)) {
                     for (String genre : m.getGenres()) {
-                        AppManager.getInstance().getSubscribeManager().notify(genre, movieName, "DELETE");
+                        AppManager.getInstance().getSubscribeManager()
+                                .notify(genre, movieName, "DELETE");
                     }
 
                     isDeleted = true;
@@ -75,7 +80,8 @@ public final class MovieDB {
     public ArrayList<Movie> getMoviesbyFilters(final Filters filter) {
 
         ArrayList<Movie> filteredMovies = new ArrayList<>();
-        for (Movie movie : AppManager.getInstance().getMovieDB().getMoviesOfUser(AppManager.getInstance().getCurrentUser())) {
+        for (Movie movie : AppManager.getInstance().getMovieDB()
+                .getMoviesOfUser(AppManager.getInstance().getCurrentUser())) {
             filteredMovies.add(movie);
         }
         if (filter.getSort() != null) {
@@ -249,11 +255,14 @@ public final class MovieDB {
         for (Movie movie : movies) {
             if (movie.getName().equals(ratedMovie.getName())) {
 
-                Integer value = movie.getUserRatings().remove(AppManager.getInstance().getCurrentUser().getCredentials().getName());
-                movie.getUserRatings().putIfAbsent(AppManager.getInstance().getCurrentUser().getCredentials().getName(), rate);
+                Integer value = movie.getUserRatings().remove(
+                        AppManager.getInstance().getCurrentUser().getCredentials().getName());
+                movie.getUserRatings().putIfAbsent(AppManager
+                        .getInstance().getCurrentUser().getCredentials().getName(), rate);
 
-                if (value != null)
+                if (value != null) {
                     hadRated = true;
+                }
 
                 int sum = 0;
                 int size = 0;

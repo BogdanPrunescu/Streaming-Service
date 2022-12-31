@@ -3,7 +3,7 @@ package pages;
 public final class Homepage extends Page {
 
     {
-        super.pageName = "homepage";
+        super.setPageName("homepage");
     }
     @Override
     public void accept(final ChangePageVisitor visitor) {

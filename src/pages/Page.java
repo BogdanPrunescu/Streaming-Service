@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class Page {
 
-    public String pageName;
+    private String pageName;
     private ArrayList<String> events = new ArrayList<>();
 
     /**
@@ -19,5 +19,20 @@ public abstract class Page {
 
     public final void setEvents(final ArrayList<String> events) {
         this.events = events;
+    }
+
+    /**
+     * Safe to use in extended classes
+     * @return
+     */
+    public String getPageName() {
+        return pageName;
+    }
+
+    /**
+     * Safe to use in extended classes
+     */
+    public void setPageName(final String pageName) {
+        this.pageName = pageName;
     }
 }

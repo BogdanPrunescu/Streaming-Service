@@ -4,7 +4,12 @@ import pages.Authpage;
 import pages.Homepage;
 import pages.Page;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public final class NavigationGraph {
     private static Map<String, List<String>> adjPages = new HashMap<>();
@@ -15,6 +20,10 @@ public final class NavigationGraph {
     private LinkedList<ChangePageCommand> history;
     private NavigationGraph() { }
 
+    /**
+     * get NavigationGraph's instance
+     * @return instance
+     */
     public static NavigationGraph getInstance() {
         if (instance == null) {
             instance = new NavigationGraph();
@@ -22,12 +31,26 @@ public final class NavigationGraph {
         return instance;
     }
 
+    /**
+     * Adds a page to the map
+     * @param pageName name of the page that needs to be added
+     */
     public void addPage(final String pageName) {
         adjPages.putIfAbsent(pageName, new ArrayList<String>());
     }
+
+    /**
+     * Link a page to one or more pages
+     * @param pageName name of the page the will link to the other pages
+     * @param links list of the pages that will be linked
+     */
     public void addLinksToPage(final String pageName, final ArrayList<String> links) {
         adjPages.get(pageName).addAll(links);
     }
+
+    /**
+     * Initiate application's page links
+     */
     public void initiateNavigationSystem() {
         instance.addPage("authpage");
         instance.addPage("login");
@@ -58,19 +81,20 @@ public final class NavigationGraph {
         instance.currentPage = new Authpage();
     }
 
-    public void changePage(ChangePageCommand command) {
+    /**
+     * Invoker's function for the Command Pattern that execute the change page command
+     * @param command command that will be executed
+     */
+    public void changePage(final ChangePageCommand command) {
         if (instance.history != null && AppManager.getInstance().getCurrentUser() != null) {
             instance.history.push(command);
-            /*
-            System.out.println("PUSH");
-            instance.history.forEach(c -> System.out.println(c.previousPage + "-" + c.newPage + " "));
-            System.out.println();
-
-             */
         }
         command.execute();
     }
 
+    /**
+     * Invoker's function for the Command Pattern that calls undo function
+     */
     public void back() {
         if (instance.history.isEmpty()) {
             Output.printOutput("Error");
@@ -80,20 +104,19 @@ public final class NavigationGraph {
             if (command != null) {
                 command.undo();
             }
-            /*
-            System.out.println("POP");
-            instance.history.forEach(c -> System.out.println(c.previousPage + "-" + c.newPage + " "));
-            System.out.println(NavigationGraph.getInstance().getCurrentPage().pageName);
-            System.out.println();
-
-             */
         }
     }
 
+    /**
+     * Delete application navigation's history
+     */
     public void deleteHistory() {
         instance.history = null;
     }
 
+    /**
+     * initiate navigation's history
+     */
     public void historyInit() {
         instance.history = new LinkedList<>();
         instance.history.push(new ChangePageCommand(instance, null, new Homepage()));
@@ -105,7 +128,7 @@ public final class NavigationGraph {
      * @return
      */
     public boolean isPageAvailable(final String dest) {
-        return adjPages.get(instance.currentPage.pageName).contains(dest);
+        return adjPages.get(instance.currentPage.getPageName()).contains(dest);
     }
 
     public Page getCurrentPage() {

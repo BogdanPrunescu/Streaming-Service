@@ -6,7 +6,7 @@ import java.util.Arrays;
 public final class Movies extends Page {
 
     {
-        super.pageName = "movies";
+        super.setPageName("movies");
         setEvents(new ArrayList<>(Arrays.asList("search", "filter")));
     }
     @Override

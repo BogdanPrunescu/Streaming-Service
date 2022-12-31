@@ -1,12 +1,9 @@
 package manager;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import fileio.Credentials;
 import fileio.UserInput;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public final class User {
@@ -28,12 +25,12 @@ public final class User {
         private String movieName;
         private String message;
 
-        public Notification(String movieName, String message) {
+        public Notification(final String movieName, final String message) {
             this.movieName = movieName;
             this.message = message;
         }
 
-        public Notification(Notification notification) {
+        public Notification(final Notification notification) {
             this.movieName = notification.getMovieName();
             this.message = notification.message;
         }
@@ -42,7 +39,7 @@ public final class User {
             return movieName;
         }
 
-        public void setMovieName(String movieName) {
+        public void setMovieName(final String movieName) {
             this.movieName = movieName;
         }
 
@@ -50,17 +47,24 @@ public final class User {
             return message;
         }
 
-        public void setMessage(String message) {
+        public void setMessage(final String message) {
             this.message = message;
         }
     }
 
-    public void update(String movieName, String message) {
+    /**
+     * Update users notification feed
+     * @param movieName movie's name
+     * @param message message that will be displayed in the notification feed
+     */
+    public void update(final String movieName, final String message) {
         Notification notification = new Notification(movieName, message);
 
-        for (Notification n : notifications)
-            if (n.movieName.equals(movieName) && n.message.equals(message))
+        for (Notification n : notifications) {
+            if (n.movieName.equals(movieName) && n.message.equals(message)) {
                 return;
+            }
+        }
 
         notifications.add(notification);
         if (message.equals("DELETE")) {
@@ -183,7 +187,7 @@ public final class User {
         return notifications;
     }
 
-    public void setNotifications(ArrayList<Notification> notifications) {
+    public void setNotifications(final ArrayList<Notification> notifications) {
         this.notifications = notifications;
     }
 }

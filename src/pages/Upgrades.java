@@ -6,7 +6,7 @@ import java.util.Arrays;
 public final class Upgrades extends Page {
 
     {
-        super.pageName = "upgrades";
+        super.setPageName("upgrades");
         this.setEvents(new ArrayList<>(Arrays.asList("buy tokens", "buy premium account")));
     }
     @Override

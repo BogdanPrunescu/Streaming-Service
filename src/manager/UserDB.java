@@ -77,7 +77,7 @@ public final class UserDB {
         return users;
     }
 
-    public void setUsers(ArrayList<User> users) {
+    public void setUsers(final ArrayList<User> users) {
         this.users = users;
     }
 }

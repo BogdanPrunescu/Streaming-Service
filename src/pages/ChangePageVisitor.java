@@ -1,10 +1,14 @@
 package pages;
 
-import manager.*;
+import manager.AppManager;
+import manager.ChangePageCommand;
+import manager.Movie;
+import manager.NavigationGraph;
+import manager.Output;
+import manager.PageFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 
 public final class ChangePageVisitor {
 
@@ -67,8 +71,10 @@ public final class ChangePageVisitor {
         AppManager.getInstance().setCurrentUser(null);
 
         Page newPage = PageFactory.getPageByName("authpage");
+
         ChangePageCommand command = new ChangePageCommand(
-                NavigationGraph.getInstance(), NavigationGraph.getInstance().getCurrentPage(), newPage);
+                NavigationGraph.getInstance(),
+                NavigationGraph.getInstance().getCurrentPage(), newPage);
         NavigationGraph.getInstance().changePage(command);
         NavigationGraph.getInstance().deleteHistory();
     }
@@ -88,7 +94,8 @@ public final class ChangePageVisitor {
             NavigationGraph.getInstance().back();
             Output.printOutput("Error");
         } else {
-            AppManager.getInstance().setCurrentMoviesList(new ArrayList<>(Arrays.asList(selectedMovie)));
+            AppManager.getInstance().setCurrentMoviesList(
+                    new ArrayList<>(Arrays.asList(selectedMovie)));
             Output.printOutput(null);
         }
     }

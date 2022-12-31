@@ -6,7 +6,7 @@ import java.util.Arrays;
 public final class Register extends Page {
 
     {
-        super.pageName = "register";
+        super.setPageName("register");
         this.setEvents(new ArrayList<>(Arrays.asList("register")));
     }
     @Override

@@ -2,41 +2,40 @@ package manager;
 
 import pages.Page;
 
-public class ChangePageCommand {
+public final class ChangePageCommand {
 
     private final NavigationGraph navigationGraph;
 
-    public Page previousPage;
+    private Page previousPage;
 
-    public Page newPage;
+    private Page newPage;
 
-    public ChangePageCommand(NavigationGraph navigationGraph, Page previousPage, Page newPage) {
+    public ChangePageCommand(final NavigationGraph navigationGraph,
+                             final Page previousPage, final Page newPage) {
         this.navigationGraph = navigationGraph;
         this.previousPage = previousPage;
         this.newPage = newPage;
     }
 
+    /**
+     * Command Pattern execute function
+     */
     public void execute() {
         previousPage = navigationGraph.getCurrentPage();
         navigationGraph.setCurrentPage(newPage);
-        if (newPage.pageName.equals("homepage")) {
+        if (newPage.getPageName().equals("homepage")) {
             NavigationGraph.getInstance().historyInit();
 
-        } else if (newPage.pageName.equals("logout")) {
+        } else if (newPage.getPageName().equals("logout")) {
             NavigationGraph.getInstance().deleteHistory();
 
         }
     }
 
+    /**
+     * Command Pattern undo function
+     */
     public void undo() {
         navigationGraph.setCurrentPage(previousPage);
-    }
-
-    @Override
-    public String toString() {
-        return "ChangePageCommand{" +
-                ", previousPage=" + previousPage +
-                ", newPage=" + newPage +
-                '}';
     }
 }
