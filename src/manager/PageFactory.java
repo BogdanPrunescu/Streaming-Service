@@ -1,5 +1,6 @@
 package manager;
 
+import events.*;
 import pages.Authpage;
 import pages.Homepage;
 import pages.Login;
@@ -9,17 +10,6 @@ import pages.Page;
 import pages.Register;
 import pages.SeeDetails;
 import pages.Upgrades;
-import events.BuyPremiumEv;
-import events.BuyTokensEv;
-import events.Event;
-import events.FilterEv;
-import events.LikeEv;
-import events.LoginEv;
-import events.PurchaseEv;
-import events.RateEv;
-import events.RegisterEv;
-import events.SearchEv;
-import events.WatchEv;
 
 public final class PageFactory {
 
@@ -98,6 +88,9 @@ public final class PageFactory {
             }
             case "buy tokens" -> {
                 return new BuyTokensEv();
+            }
+            case "subscribe" -> {
+                return new SubscribeEv();
             }
             default -> {
                 return null;

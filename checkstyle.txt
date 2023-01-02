@@ -1,8 +1,13 @@
 Starting audit...
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\events\OnPageVisitor.java:260:23: Parameter subscribeEv should be final. [FinalParameters]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\events\OnPageVisitor.java:260:48: Parameter dependency should be final. [FinalParameters]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\events\OnPageVisitor.java:267:31: ':' should be on a new line. [OperatorWrap]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\events\SubscribeEv.java:5:5: Class 'SubscribeEv' looks like designed for extension (can be subclassed), but the method 'accept' does not have javadoc that explains how to do that safely. If class is not designed for extension consider making the class 'SubscribeEv' final or making the method 'accept' static/final/abstract/empty, or adding allowed annotation for the method. [DesignForExtension]
+[ERROR] C:\Users\a\Desktop\proiect2\.\src\manager\PageFactory.java:3:14: Using the '.*' form of import should be avoided - events.*. [AvoidStarImport]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:1: File does not end with a newline. [NewlineAtEndOfFile]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:9:28: Using the '.*' form of import should be avoided - java.util.concurrent.*. [AvoidStarImport]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:158: Line is longer than 100 characters (found 108). [LineLength]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:207:65: Parameter testFileName should be final. [FinalParameters]
 [ERROR] C:\Users\a\Desktop\proiect2\.\src\Test.java:224: Line is longer than 100 characters (found 108). [LineLength]
 Audit done.
-Checkstyle ends with 5 errors.
+Checkstyle ends with 10 errors.

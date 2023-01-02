@@ -8,7 +8,7 @@ public final class SeeDetails extends Page {
     {
         super.setPageName("see details");
         this.setEvents(new ArrayList<>(Arrays.asList("purchase",
-                "watch", "like", "rate")));
+                "watch", "like", "rate", "subscribe")));
     }
 
     @Override

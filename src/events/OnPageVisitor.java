@@ -238,6 +238,7 @@ public final class OnPageVisitor {
 
         if (currentUser.getWatchedMovies().contains(
                 AppManager.getInstance().getCurrentMoviesList().get(0))) {
+            Output.printOutput(null);
             return;
         }
 
@@ -247,6 +248,33 @@ public final class OnPageVisitor {
                     AppManager.getInstance().getCurrentMoviesList());
             Output.printOutput(null);
         } else {
+            Output.printOutput("Error");
+        }
+    }
+
+    /**
+     * Subscribe event
+     * @param subscribeEv visitor
+     * @param dependency what the event may need to execute
+     */
+    public void visit(SubscribeEv subscribeEv, Object dependency) {
+
+        String subscribedGenre = ((ActionInput) dependency).getSubscribedGenre();
+
+        boolean canSubscribe = false;
+        if (NavigationGraph.getInstance().
+                getCurrentPage().getPageName().equals("see details")) {
+            for (String genre :
+                    AppManager.getInstance().getCurrentMoviesList().get(0).getGenres()) {
+                if (genre.equals(subscribedGenre)) {
+                    AppManager.getInstance().getSubscribeManager().subscribe(
+                            AppManager.getInstance().getCurrentUser(), genre
+                    );
+                    canSubscribe = true;
+                }
+            }
+        }
+        if (!canSubscribe) {
             Output.printOutput("Error");
         }
     }
